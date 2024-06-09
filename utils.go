@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func cleanString(s string) string {
+func CleanString(s string) string {
 	reg := regexp.MustCompile(`[^\w\s-]`)
 	s = reg.ReplaceAllString(s, "")
 
@@ -14,7 +14,7 @@ func cleanString(s string) string {
 	return s
 }
 
-func removeHTMLTags(htmlString string) string {
+func RemoveHTMLTags(htmlString string) string {
 	re := regexp.MustCompile(`<[^>]*>`)
 	return re.ReplaceAllString(htmlString, "")
 }
