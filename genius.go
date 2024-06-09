@@ -1,13 +1,13 @@
-package main 
+package main
 
 import (
 	"fmt"
+	"html"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strings"
-	"html"
 )
 
 func FetchLyrics(track Track) (string, error) {
@@ -35,8 +35,8 @@ func buildGeniusURL(track Track) string {
 	artist := cleanString(track.Artist)
 	title := cleanString(track.Title)
 
-    artistSlug := strings.ReplaceAll(artist, " ", "-")
-    titleSlug := strings.ReplaceAll(title, " ", "-")
+	artistSlug := strings.ReplaceAll(artist, " ", "-")
+	titleSlug := strings.ReplaceAll(title, " ", "-")
 
 	artistEncoded := url.PathEscape(artistSlug)
 	titleEncoded := url.PathEscape(titleSlug)
@@ -55,9 +55,9 @@ func extractLyrics(rawHtml string) (string, error) {
 	}
 
 	lyrics := matches[1]
-    lyrics = html.UnescapeString(lyrics)
+	lyrics = html.UnescapeString(lyrics)
 	lyrics = strings.ReplaceAll(lyrics, "<br/>", "\n")
-    lyrics = removeHTMLTags(lyrics)
+	lyrics = removeHTMLTags(lyrics)
 
 	return lyrics, nil
 }

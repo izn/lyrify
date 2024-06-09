@@ -1,7 +1,6 @@
-package main 
+package main
 
 type Track struct {
-    Artist string
-    Title string
+	Artist string
+	Title  string
 }
-

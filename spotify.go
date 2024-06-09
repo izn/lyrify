@@ -1,12 +1,12 @@
-package main 
+package main
 
 import (
+	"errors"
 	"os/exec"
 	"strings"
-    "errors"
 )
 
-// Darwin-only 
+// Darwin-only
 func CurrentSpotifyTrack() (Track, error) {
 	script := `
     tell application "Spotify"
@@ -28,9 +28,9 @@ func CurrentSpotifyTrack() (Track, error) {
 
 	parts := strings.Split(string(output), "\t")
 
-    if len(parts) < 2 {
-        return Track{}, errors.New("Is Spotify running?")
-    }
+	if len(parts) < 2 {
+		return Track{}, errors.New("Is Spotify running?")
+	}
 
 	return Track{
 		Artist: parts[0],
