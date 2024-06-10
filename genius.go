@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/lyrify/v2/spotify"
+	"github.com/izn/lyrify/spotify"
 	"html"
 	"io/ioutil"
 	"net/http"

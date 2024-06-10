@@ -1,3 +1,3 @@
-module github.com/lyrify/v2
+module github.com/izn/lyrify
 
 go 1.22.4
