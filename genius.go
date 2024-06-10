@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/lyrify/v2/spotify"
 	"html"
 	"io/ioutil"
 	"net/http"
@@ -10,7 +11,7 @@ import (
 	"strings"
 )
 
-func FetchLyrics(track Track) (string, error) {
+func FetchLyrics(track spotify.Track) (string, error) {
 	url := buildGeniusURL(track)
 	resp, err := http.Get(url)
 	if err != nil {
@@ -31,7 +32,7 @@ func FetchLyrics(track Track) (string, error) {
 	return lyrics, nil
 }
 
-func buildGeniusURL(track Track) string {
+func buildGeniusURL(track spotify.Track) string {
 	artist := CleanString(track.Artist)
 	title := CleanString(track.Title)
 

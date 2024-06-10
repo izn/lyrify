@@ -1,4 +1,4 @@
-package main
+package spotify
 
 type Track struct {
 	Artist string

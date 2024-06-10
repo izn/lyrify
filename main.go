@@ -2,10 +2,17 @@ package main
 
 import (
 	"fmt"
+	"github.com/lyrify/v2/spotify"
 )
 
 func main() {
-	track, err := CurrentSpotifyTrack()
+	spotifyClient, err := spotify.NewSpotifyClient()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	track, err := spotifyClient.CurrentTrack()
 	if err != nil {
 		fmt.Println(err)
 		return
