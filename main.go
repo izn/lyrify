@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/izn/lyrify/lyrics"
 	"github.com/izn/lyrify/spotify"
 )
 
@@ -20,11 +21,11 @@ func main() {
 
 	fmt.Println(track.Artist, "-", track.Title)
 
-	lyrics, err := FetchLyrics(track)
+	lyricsText, err := lyrics.FetchLyrics(track)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println(lyrics)
+	fmt.Println(lyricsText)
 }
