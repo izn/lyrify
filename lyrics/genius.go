@@ -11,6 +11,7 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/izn/lyrify/spotify"
+	"golang.org/x/net/html"
 )
 
 func FetchLyrics(track spotify.Track) (string, error) {
@@ -99,34 +100,63 @@ func extractLyrics(rawHTML string) (string, error) {
 	var lyrics []string
 
 	doc.Find("div[data-lyrics-container='true']").Each(func(i int, s *goquery.Selection) {
-		s.Contents().Each(func(j int, node *goquery.Selection) {
-			if goquery.NodeName(node) == "#text" {
-				text := strings.TrimSpace(node.Text())
-				if text != "" {
-					lyrics = append(lyrics, text)
-				}
-				return
-			}
+		if len(s.Nodes) == 0 {
+			return
+		}
 
-			if goquery.NodeName(node) == "br" {
-				lyrics = append(lyrics, "\n")
-				return
-			}
-
-			if goquery.NodeName(node) == "a" {
-				text := strings.TrimSpace(node.Text())
-				if text != "" {
-					lyrics = append(lyrics, text)
-				}
-			}
-		})
+		text := strings.TrimSpace(extractNodeText(s.Nodes[0]))
+		if text != "" {
+			lyrics = append(lyrics, text)
+		}
 	})
 
 	if len(lyrics) == 0 {
 		return "", errors.New("lyrics container not found")
 	}
 
-	return strings.Join(lyrics, ""), nil
+	return normalizeLyrics(strings.Join(lyrics, "")), nil
+}
+
+func normalizeLyrics(raw string) string {
+	raw = strings.TrimSpace(raw)
+
+	if strings.Contains(raw, "Read More") {
+		if idx := strings.Index(raw, "["); idx >= 0 {
+			raw = raw[idx:]
+		}
+	}
+
+	return strings.TrimSpace(raw)
+}
+
+func extractNodeText(node *html.Node) string {
+	if node == nil {
+		return ""
+	}
+
+	var b strings.Builder
+	var walk func(*html.Node)
+	walk = func(n *html.Node) {
+		if n == nil {
+			return
+		}
+
+		if n.Type == html.ElementNode && n.Data == "br" {
+			b.WriteString("\n")
+			return
+		}
+
+		if n.Type == html.TextNode {
+			b.WriteString(n.Data)
+		}
+
+		for c := n.FirstChild; c != nil; c = c.NextSibling {
+			walk(c)
+		}
+	}
+
+	walk(node)
+	return b.String()
 }
 
 func cleanString(s string) string {
